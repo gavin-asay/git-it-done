@@ -1,5 +1,6 @@
 let issueContainerEl = document.querySelector("#issues-container");
 let limitWarningEl = document.querySelector("#limit-warning");
+let repoNameEl = document.querySelector("#repo-name");
 
 let getRepoIssues = function(repo) {
     let apiURL = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
@@ -17,7 +18,8 @@ let getRepoIssues = function(repo) {
                 }
             });
         } else {
-            alert("There was a problem with your request!")
+            // if not successful, redirect to homepage
+            document.location.replace("./index.html");
         }
     });
 }
@@ -72,4 +74,16 @@ let displayWarning = function(repo) {
     limitWarningEl.appendChild(linkEl);
 }
 
-getRepoIssues("expressjs/express");
+let getRepoName = function() {
+    let queryString = document.location.search;
+    let repoName = queryString.split("=")[1];
+
+    if (repoName) {
+        getRepoIssues(repoName);
+        repoNameEl.textContent = repoName;
+    } else {
+        document.location.replace("./index.html");
+    }
+}
+
+getRepoName();
